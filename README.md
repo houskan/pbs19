@@ -1,20 +1,29 @@
-# Melting Fluid Simulation by Roger Barton, Alessia Paccagnella and Niklaus Houska
+# Melting Fluid Simulation 
+2019 - Roger Barton, Alessia Paccagnella and Niklaus Houska
+<div align="center">
+<img src="assets/README/1_Bunny.gif" alt="Bunny1" width="49%"/>
+  <img src="assets/README/2_Bunny.gif" alt="Bunny2" width=49%"/>
+</div>
 
-![melting-bunny](assets/README/melting-bunny.gif)
+## Table of Contents
+* [About the Project](#about-the-project)
+* [What Has Been Implemented](#what-has-been-implemented)
+* [References](#references)
 
-![melting-bunny-2](assets/README/melting-bunny-2.gif)
+## About the Project
+This repository contains the source code for the graded semester project for the [Physically-Based Simulation course 2019](https://cgl.ethz.ch/teaching/simulation20/fame.php) at ETH Zurich. 
 
-- All important hyper-parameters are in `GuiData.h`, most of them can be tweaked in the UI.
+We provide an implementation of a 2D PIC/FLIP fluid simulation with implicit viscosity solving. Additionally, we implemented heat diffusion and set viscosity based on temperature by clamped inverse square to achieve a nice melting effect. 
 
-**Additional Shortcuts:**  
+<div align="center">
+<img src="assets/README/visco_1.gif" alt="Viscosity 1" width="49%"/>
+  <img src="assets/README/visco_1k.gif" alt="Viscosity 1000" width=49%"/>
+  <img src="assets/README/visco_10k.gif" alt="Viscosity 10k" width="49%"/>
+  <img src="assets/README/visco_100m.gif" alt="Viscosity 100m" width=49%"/>
+</div>
+Real-time fluid simulation with varying viscosity: 1 (Top left), 1000 (Top Right), 10'000 (Bottom Left), 100'000'000 (Bottom Right)
 
-- `f` - select fluid field
-- `g` - pressure field
-- `h` - temperature field
-- `F` or `v` - select fluid brush
-- `H` or `n` - temperature brush
-- `Crl+Click` to use other brush
-- `1-3` - brush texture
+
 
 ## What has been implemented
 
@@ -35,15 +44,13 @@
   - Link fluid and temperature simulations by making particles transport some of the temperature, see `FluidSolver::transferTemperatureGridToParticles`
     - Efficiently tuned by `GuiData::m_particleTemperatureTransfer`
     - Works best when slightly below the average particles per grid cell (1/8 by default)
-- Viscosity based on temperature by clamped inverse square, can be easily changed in `FluidSolver::updateViscosity`
-    - We used this behavior to make the liquid stay solid until a certain temperature
-- **Interaction**, click to add particles or temperature
-  - Use an image as a brush (based on ascii art export from gimp)
-- Works for non-square grids
+- Viscosity based on temperature by clamped inverse square, (see `FluidSolver::updateViscosity`)
+- **Interaction**, click to add particles or temperature. Use an image as a brush (based on ascii art export from gimp)
 
 Probably the most interesting function is `FluidSolver::stepPICFLIP` which gives an overview of a single step.
 
 ## Optimization
+*Course notes*
 
 Note: scaling the grid size by 2x the area means **more than** 2x slowdown -> performance does not scale linearly.
 
@@ -62,7 +69,7 @@ Below is a profile in CLion for a ~15s high viscosity simulation with a 128x64 g
 
 *note: libgomp.so is related to eigen parallelisation through opemp*
 
-## References & Links
+## References
 
 [1] https://www.cc.gatech.edu/~turk/my_papers/melt.pdf  
 [2] https://cs.uwaterloo.ca/~c2batty/papers/BattyBridson08.pdf  
